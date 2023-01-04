@@ -1,0 +1,284 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define max(i,j) (((i) > (j)) ? (i) : (j))
+typedef struct node
+{
+    struct node *left;
+    int data;
+    struct node *right;
+}tree;
+tree* create(int);
+void cnode(tree **,tree*);
+void inorder(tree*);
+void preorder(tree*);
+void postorder(tree*);
+int search(tree*,int);
+void leaf(tree*,int*);
+void totalnodes(tree*,int*);
+int height(tree*);
+tree* succ(tree*);
+tree* del(tree*,int);
+void countonechild(tree*,int*);
+void countleafnodes(tree*,int*);
+void counttwochilds(tree*root,int*);
+int main()
+{
+    tree *root=NULL,*temp;
+    int ch,n;
+    do
+    {
+        printf("enter the element--\n");
+        scanf("%d",&ch);
+        temp=create(ch);
+        cnode(&root,temp);
+        printf("\n1-continue\n2-exit");
+        scanf("%d",&ch);
+    }while(ch==1);
+    do
+    {
+        printf("elements are--\n");
+        inorder(root);
+        printf("enter the choice--\n");
+        printf("1-search a particular element\n");
+        printf("2-delete a node from tree\n");
+        printf("3-total number of leaf nodes\n");
+        printf("4-height binary search tree\n");
+        printf("5-total number of nodes from right hand side of nodes\n");
+        printf("6-inorder\n");
+        printf("7-preorder\n");
+        printf("8-postorder\n");
+        printf("9-countonechild\n");
+        printf("10-countleafnode\n");
+        printf("11-counttwochild\n");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1:
+            printf("enter the element to be searched\n");
+            scanf("%d",&n);
+            if(search(root,n))
+                printf("element found\n");
+            else    
+                printf("element not found\n");
+            break;
+            case 2:
+            printf("enter the number--\n");
+            scanf("%d",&n);
+            del(root,n);
+            break;
+            case 3:
+            n=0;
+            leaf(root,&n);
+            printf("total leaf nodes--%d\n",n);
+            break;
+            case 4:
+            printf("height of binary search tree--%d\n",height(root));
+            break;
+            case 5:
+            n=0;
+            totalnodes(root->right,&n);
+            printf("total nodes on right hand side--%d\n",n);
+            break;
+            default:
+            printf("wrong input");
+            break;
+            case 6:
+            printf("inorder traversal:\n");
+            inorder(root);
+            break;
+            case 7:
+            printf("\npreorder traversal:\n");
+            preorder(root);
+            break;
+            case 8:
+            printf("\npostorder traversal:\n");
+            postorder(root);
+            break;
+            case 9:
+            printf("\nnodes have only one child:");
+            countonechild(root,&ch);
+            printf("%d",ch);
+            break;
+            case 10:
+            printf("\ntotal leaf nodes:");
+            countleafnodes(root,&ch);
+            printf("%d",ch);
+            break;
+            case 11:
+            printf("\nnodes have two childs:");
+            counttwochilds(root,&ch);
+            printf("%d",ch);
+            break;
+        }
+        printf("\n1-continue\n2-exit");
+        scanf("%d",&ch);
+    }while(ch==1);
+}
+tree* create(int n)
+{
+    tree *temp;
+    temp=(tree*)malloc(sizeof(tree));
+    temp->data=n;
+    temp->right=NULL;
+    temp->left=NULL;
+    return temp;
+}
+void cnode(tree **root,tree *temp)
+{
+    if(*root==NULL)
+        *root=temp;
+    else
+    {
+        if((*root)->data>temp->data)
+            cnode(&(*root)->left,temp);
+        else if((*root)->data<temp->data)
+            cnode(&(*root)->right,temp);
+        else
+            printf("same value of nodes");
+    }
+}
+void inorder(tree*root)
+{
+    if(root==NULL)
+    {
+        return;
+    }
+    inorder(root->left);
+    printf("%d ",root->data);
+    inorder(root->right);
+}
+void preorder(tree*root)
+{
+    if(root==NULL)
+    {
+        return;
+    }
+    printf("%d ",root->data);
+    preorder(root->left);
+    preorder(root->right);
+}
+void postorder(tree*root)
+{
+    if(root==NULL)
+    {
+        return; 
+    }
+    postorder(root->left);
+    postorder(root->right);
+    printf("%d ",root->data);
+}
+int search(tree *root,int n)
+{
+    if(root==NULL)
+        return 0;
+    else
+    {
+        if(root->data==n)
+            return 1;
+        search(root->left,n);
+        search(root->right,n);
+    }
+}
+void leaf(tree *root,int *c)
+{
+    if(root==NULL)
+        return;
+    else
+    {
+    if(root->left==NULL && root->right==NULL)
+        (*c)++;
+        leaf(root->left,c);
+        leaf(root->right,c);
+    }
+
+}
+void totalnodes(tree *root,int *c)
+{
+    if(root==NULL)
+        return;
+    else
+    {
+            (*c)++;
+        totalnodes(root->left,c);
+        totalnodes(root->right,c);
+    }
+}
+int height(tree *root)
+{
+    if(root==NULL)
+        return 0;
+    int l=height(root->left);
+    int r=height(root->right);
+    return max(l,r)+1;
+}
+tree* del(tree *root,int value)
+{
+    tree *s=NULL;
+    if(root==NULL)
+        return NULL;
+    if(root->right==NULL && root->left==NULL)
+    {
+        free(root);
+        return NULL;
+    }
+    if(root->data>value)
+        root->left=del(root->left,value);
+    else if(root->data<value)
+        root->right=del(root->right,value);
+    else
+    {
+        s=succ(root);
+        root->data=s->data;
+        root->right=del(root->right,value);
+    }
+    return root;
+}
+
+void countonechild(tree*root,int*c)
+{
+    if(root==NULL)
+    {
+        return;
+    }
+    countonechild(root->left,c);
+if((root->right==NULL&&root->left!=NULL)||(root->right!=NULL&&root->left==NULL))
+    {
+    (*c)++;
+    }
+    countonechild(root->right,c);
+}
+void countleafnodes(tree*root,int*c)
+{
+    if(root==NULL)
+    {
+        return;
+    }
+    countleafnodes(root->left,c);
+    if(root->left==NULL&&root->right==NULL)
+    {
+        (*c)++;
+    }
+    countleafnodes(root->right,c);
+}
+void counttwochilds(tree*root,int*c)
+{
+    if(root==NULL)
+    {
+        return;
+    }
+    counttwochilds(root->left,c);
+    if((root->right!=NULL)&&(root->left!=NULL))
+    {
+        (*c)++;
+    }
+    counttwochilds(root->right,c);
+}
+tree * succ(tree *root)
+{
+    root=root->right;
+    while(root->right!=NULL)
+        root=root->right;
+    return root;
+}
+
+ 
