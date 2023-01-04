@@ -1,0 +1,81 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node
+{
+    int data;
+    struct node *next;
+}link;
+void create(link **,link **);
+void display(link *);
+void split(link *,link **,link **);
+int main()
+{
+    link *p=NULL,*l=NULL,*q,*r;
+    int ch;
+    do
+    {
+        create(&p,&l);
+        printf("\n1-continue\n2-exit\n");
+        scanf("%d",&ch);
+    }while(ch==1);
+    display(p);
+    split(p,&q,&r);
+    q=q->next;
+    r=r->next;
+    printf("even position elements--\n");
+    display(q);
+    printf("odd position elements--\n");
+    display(r);
+}
+void create(link **l,link **r)
+{
+    link *p;
+    p=(link*)malloc(sizeof(link));
+    printf("enter the element\n");
+    scanf("%d",&(p->data));
+    if(*l==NULL && *r==NULL)
+        *l=*r=p;
+    else 
+    {
+        (*r)->next=p;
+        *r=p;
+    }
+    (*r)->next=NULL;
+}
+void display(link *l)
+{
+    printf("elements are--\n");
+    while(l!=NULL)
+    {
+        printf("%d\n",l->data);
+        l=l->next;
+    }
+}
+void split(link *p,link **q,link **r)
+{
+    link *p1,*n1;
+    int c=0;
+    p1=(link*)malloc(sizeof(-1));
+    n1=(link*)malloc(sizeof(-1));
+    *q=p1;
+    *r=n1;
+    while(p!=NULL)
+    {
+        if(c%2==0)
+        {
+            n1->next=p;
+            p=p->next;
+            n1=n1->next;
+            c=c+1;
+        }
+        else
+        {
+            p1->next=p;
+            p=p->next;
+            p1=p1->next;
+            c=c+1;
+        }
+    }
+    n1->next=NULL;
+    p1->next=NULL;
+}
