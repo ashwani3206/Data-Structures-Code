@@ -1,0 +1,63 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+void create(struct node **head)
+{
+    int i,n,info;
+    struct node *newnode=NULL,*temp=NULL;
+    printf("enter number of nodes ");
+    scanf("%d",&n);
+    for(i=0;i<n;i++)
+    {
+        printf("enter value of %d node ",i+1);
+        scanf("%d",&info);
+        newnode=(struct node *)malloc(sizeof(struct node));
+        newnode->data=info;
+        if((*head)==NULL)
+        *head=temp=newnode;
+        else
+        {
+            temp->next=newnode;
+            temp=newnode;
+        }
+    }
+    newnode->next=NULL;
+}
+
+void disp(struct node *head)
+{
+    printf("\n linked list is \n");
+    struct node *temp=NULL;
+    temp=head;
+    while(temp!=NULL)
+    {
+        printf("%d\t",temp->data);
+        temp=temp->next;
+    }
+}
+
+int getCount(struct node* head)
+{
+    int count = 0; // Initialize count
+    struct node* current = head; // Initialize current
+    while (current != NULL) {
+        count++;
+        current = current->next;
+    }
+    return count;
+}
+
+
+int main()
+{
+    struct node *head=NULL;
+    create(&head);
+    disp(head);
+    printf("\nthe total number of nodes is:%d",getCount(head));
+    return 0;
+}
