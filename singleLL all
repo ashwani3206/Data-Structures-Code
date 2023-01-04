@@ -1,0 +1,283 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+void create(struct node **head)
+{
+    int i,n;
+    struct node *newnode=NULL,*temp=NULL;
+    printf("enter num of nodes you wnat to create ");
+    scanf("%d",&n);
+    for(i=1;i<=n;i++)
+    {
+        newnode=(struct node *)malloc(sizeof(struct node));
+        printf("enter info of %d node: ",i);
+        scanf("%d",&newnode->data);
+        if(*head==NULL)
+        (*head)=temp=newnode;
+
+        else
+        {
+            temp->next=newnode;
+            temp=newnode;
+        }
+    }
+    newnode->next=NULL;
+    //return head;
+}
+
+void prime(struct node **head)
+{
+    struct node *temp=NULL;
+    int info,i;
+    temp=*head;
+   // printf("yess ");
+    while(temp!=NULL)
+    {
+        info=temp->data;
+        for(i=2;i<=info;i++)
+        {
+            if(info%i==0)
+                break;
+        }
+         // printf("yess ");
+        if(i==info)
+            printf("%d\t",temp->data);
+        temp=temp->next;
+    }
+}
+
+void display(struct node**head)
+{
+    struct node*temp=NULL;
+    temp=*head;
+    while(temp!=NULL)
+    {
+        printf("%d\t",temp->data);
+        temp=temp->next;
+    }
+}
+
+void search(struct node **head)
+{
+    struct node *temp=NULL;
+    temp=*head;
+    int ch,i=1,pos;
+    printf("enter number you search");
+    scanf("%d",&ch);
+    while(temp!=NULL)
+    {
+        if(temp->data==ch){
+            pos=i;
+            break;
+        }
+        else
+            i++;
+            temp=temp->next;
+    }
+    if(temp==NULL)
+        printf("num not found ");
+    else
+        printf("%d ",pos);
+
+}
+void alt(struct node**head)
+{
+    struct node*temp=NULL;
+    temp=*head;
+    while(temp!=NULL)
+    {
+        printf("%d\t",temp->data);
+        temp=temp->next->next;
+
+    }
+
+}
+
+void add(struct node**head1,struct node **head2)
+{
+    struct node*temp1=NULL,*temp2=NULL,*a,*b;
+    temp1=*head1;
+    temp2=*head2;
+   while(temp1!=NULL||temp2!=NULL)
+   {
+       a=temp1->next;
+       b=temp2->next;
+       temp1->next=temp2;
+       temp2->next=a;
+       temp1=a;
+       temp2=b;
+   }
+}
+
+void del(struct node**head)
+{
+    struct node*temp=NULL,*newp=NULL;
+    temp=*head;
+    newp=temp->next;
+    while(temp!=NULL)
+    {
+         newp=temp->next;
+        if(newp->data%2!=0){
+           temp->next=newp->next;
+           free(newp);
+        }
+        temp=temp->next;
+
+    }
+}
+
+void d(struct node**head)
+{
+    struct node*temp=NULL;
+    temp=*head;
+    int pos=1;
+    while(temp!=NULL)
+    {
+        if(temp->data%2!=0){
+            anypos(&head,pos);
+            pos--;
+        }
+        else
+        {
+            pos++;
+        }
+        temp=temp->next;
+
+    }
+
+}
+
+void anypos(struct node **head,int pos)
+{
+    int i=1;
+    struct node *temp=NULL,*newp=NULL;
+    temp=*head;
+    while(i<pos-1)
+    {
+        temp=temp->next;
+    }
+    newp=temp->next;
+    temp->next=newp->next;
+    free(newp);
+}
+
+void addempty(struct node **head)
+{
+    int info;
+    printf("enter info of 1 node");
+    scanf("%d",&info);
+    (*head)=(struct node *)malloc(sizeof(struct node ));
+    (*head)->data=info;
+   //  printf("yesss ");
+    (*head)->next=NULL;
+   // printf("yess ");
+}
+
+void addtobeg(struct node **head,int info)
+{
+    struct node *newnode;
+    newnode=(struct node *)malloc(sizeof(struct node ));
+    newnode->data=info;
+    newnode->next=(*head);
+    (*head)=newnode;
+
+}
+
+void addatend(struct node **head)
+{
+    struct node *newnode,*temp;
+    newnode=(struct node *)malloc(sizeof(struct node));
+    printf("Enter the value");
+    scanf("%d",&newnode->data);
+    newnode->next=NULL;
+    temp=*head;
+    while(temp->next!=NULL)
+    {
+        temp=temp->next;
+    }
+    temp->next=newnode;
+}
+
+void addatpos(struct node **head)
+ {
+     int count,i=1,pos;
+     struct node *temp,*newnode;
+     temp=*head;
+     printf("enter the position you want to enter");
+     scanf("%d",&pos);
+     if(pos>count)
+     {
+         printf("Invalid");
+     }
+     else
+     {
+     while(i<pos)
+     {
+         temp=temp->next;
+         i++;
+     }
+     newnode=(struct node*)malloc(sizeof(struct node));
+     printf("Enter the data");
+     scanf("%d",newnode->data);
+     newnode->next=temp->next;
+     temp->next=newnode;
+ }
+
+void delsec_last(struct node **head)
+{
+    struct node *temp=NULL,*prev=NULL;
+    temp=*head;
+    while(temp->next->next!=NULL)
+    {
+       prev=temp;
+       temp=temp->next;
+
+    }
+    prev->next=temp->next;
+    free(temp);
+}
+
+
+
+
+
+int main()
+{
+   // struct node *head1=NULL,*head2=NULL;
+    //head1=create(head1);
+    //head2=create(head2);
+    //add(&head1,&head2);
+
+   //display(&head1);
+   struct node *head=NULL;
+   create(&head);
+   //printf("yess");
+  // del(&head);
+ // d(&head);
+// int n,i,info;
+  // printf("yyy");
+   // addempty(&head);
+    //printf("enter nodes want to insert ");
+   // scanf("%d",&n);
+    //for(i=0;i<n;i++)
+   // {
+       // printf("enter info of %d node",i+2);
+        //scanf("%d",&info);
+   // addtobeg(&head,info);
+   // }
+   //delsec_last(&head);
+   //display(&head);
+    //printf("\n");
+   //search(&head);
+    //prime(&head);
+    //alt(&head);
+    //addatend(&head);
+    //addatpos(&head);
+    return 0;
+}
